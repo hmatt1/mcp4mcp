@@ -1,7 +1,16 @@
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
 [project]
-name = "python-template"
+name = "mcp4mcp"
 version = "0.1.0"
-description = ""
-authors = ["Your Name <you@example.com>"]
+description = "Meta MCP Server for MCP development intelligence"
+authors = [{name = "Your Name", email = "your.email@example.com"}]
 requires-python = ">=3.11"
-dependencies = []
+dependencies = [
+    "fastmcp>=2.0.0",
+    "pydantic>=2.0.0",
+    "aiosqlite>=0.19.0",
+]
