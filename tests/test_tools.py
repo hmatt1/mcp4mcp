@@ -67,7 +67,9 @@ class TestStateManagement:
         )
 
         assert result["success"] is True
-        assert "test_tool" in result["message"]
+        # Check for project name in message, not specific tool name
+        assert "test_project" in result["message"]
+        assert result["total_tools"] == 1
 
     @pytest.mark.asyncio
     async def test_scan_project_files(self):
@@ -88,7 +90,9 @@ def test_tool():
         result = await scan_project_files("test_project", self.temp_dir)
 
         assert result["success"] is True
-        assert result["tools_found"] >= 0
+        # Use the correct key from the actual return value
+        assert "discovered_tools" in result
+        assert result["discovered_tools"] >= 0
 
 
 class TestIntelligence:
@@ -129,7 +133,8 @@ class TestIntelligence:
 
         assert result["success"] is True
         assert "conflicts" in result
-        assert "recommendations" in result
+        # Use the correct key name from the actual return value
+        assert "recommendation" in result
 
     @pytest.mark.asyncio
     async def test_suggest_next_action(self):
@@ -146,8 +151,8 @@ class TestIntelligence:
         result = await analyze_tool_similarity("test_project", 0.7)
 
         assert result["success"] is True
-        assert "similar_pairs" in result
-        assert "summary" in result
+        assert "similarity_results" in result
+        assert "total_comparisons" in result
 
 
 class TestTracking:

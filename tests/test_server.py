@@ -1,4 +1,3 @@
-
 """
 Tests for mcp4mcp server integration
 """
@@ -41,17 +40,22 @@ class TestServerIntegration:
         # Remove test database
         if self.db_path.exists():
             os.remove(self.db_path)
-        os.rmdir(self.temp_dir)
+        
+        # Clean up temp directory
+        import shutil
+        if os.path.exists(self.temp_dir):
+            shutil.rmtree(self.temp_dir)
     
     def test_server_creation(self):
         """Test that server is created with tools"""
         assert self.mcp.name == "test-mcp4mcp"
-        # Tools should be registered
-        assert len(self.mcp._tools) > 0
+        # Check if server has tools registered using the correct FastMCP API
+        assert hasattr(self.mcp, 'tools')
+        assert len(self.mcp.tools) > 0
     
     def test_tool_registration(self):
         """Test that all expected tools are registered"""
-        tool_names = [tool.name for tool in self.mcp._tools.values()]
+        tool_names = list(self.mcp.tools.keys())
         
         # State management tools
         assert "get_project_state_tool" in tool_names
@@ -71,16 +75,12 @@ class TestServerIntegration:
     async def test_tool_execution(self):
         """Test that tools can be executed"""
         # Find the get_project_state_tool
-        get_project_tool = None
-        for tool in self.mcp._tools.values():
-            if tool.name == "get_project_state_tool":
-                get_project_tool = tool
-                break
+        assert "get_project_state_tool" in self.mcp.tools
         
-        assert get_project_tool is not None
+        get_project_tool = self.mcp.tools["get_project_state_tool"]
         
-        # Execute the tool
-        result = await get_project_tool.func(project_name="test_project")
+        # Execute the tool using the correct FastMCP API
+        result = await get_project_tool(project_name="test_project")
         
         assert result["success"] is True
         assert "project" in result

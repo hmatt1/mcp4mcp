@@ -1,4 +1,3 @@
-
 """
 SQLite storage optimized for MCP project intelligence
 """
@@ -197,9 +196,16 @@ async def save_project_state(project: ProjectState) -> None:
         await db.commit()
 
 
-async def find_similar_tools_db(tool_name: str, project_name: str = "default", threshold: float = 0.7) -> List[Tool]:
+async def find_similar_tools_db(tool_name: str, tool_description: str, project_name: str = "default", threshold: float = 0.7) -> List[Tool]:
     """Fast similarity queries across all projects"""
     await init_database()
+    
+    # Create a temporary tool for comparison
+    temp_tool = Tool(
+        name=tool_name,
+        description=tool_description,
+        status=ToolStatus.PLANNED
+    )
     
     async with aiosqlite.connect(DB_PATH) as db:
         cursor = await db.execute("""
@@ -210,22 +216,32 @@ async def find_similar_tools_db(tool_name: str, project_name: str = "default", t
         rows = await cursor.fetchall()
         similar_tools = []
         
+        # Import here to avoid circular imports
+        from .analyzers.similarity import ToolSimilarityAnalyzer
+        analyzer = ToolSimilarityAnalyzer(threshold)
+        
         for row in rows:
-            similarity_scores = json.loads(row[10]) if row[10] else {}
-            if tool_name in similarity_scores and similarity_scores[tool_name] >= threshold:
-                tool = Tool(
-                    name=row[0],
-                    description=row[2],
-                    status=ToolStatus(row[3]),
-                    file_path=row[4],
-                    function_name=row[5],
-                    parameters=json.loads(row[6]) if row[6] else [],
-                    return_type=row[7],
-                    created_at=datetime.fromisoformat(row[8]),
-                    updated_at=datetime.fromisoformat(row[9]),
-                    similarity_scores=similarity_scores
-                )
-                similar_tools.append(tool)
+            # Create tool from database row
+            db_tool = Tool(
+                name=row[0],
+                description=row[2],
+                status=ToolStatus(row[3]),
+                file_path=row[4],
+                function_name=row[5],
+                parameters=json.loads(row[6]) if row[6] else [],
+                return_type=row[7],
+                created_at=datetime.fromisoformat(row[8]),
+                updated_at=datetime.fromisoformat(row[9]),
+                similarity_scores=json.loads(row[10]) if row[10] else {}
+            )
+            
+            # Calculate similarity
+            similarity = analyzer.calculate_similarity(temp_tool, db_tool)
+            
+            if similarity >= threshold:
+                # Update similarity score
+                db_tool.similarity_scores[tool_name] = similarity
+                similar_tools.append(db_tool)
         
         return similar_tools
 
