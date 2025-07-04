@@ -26,3 +26,21 @@ mode = "sequential"
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python server.py"
+
+[[workflows.workflow]]
+name = "Run tests"
+mode = "sequential"
+author = 44620470
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m pytest ./tests"
+
+[[workflows.workflow]]
+name = "Test Suite"
+author = 44620470
+mode = "sequential"
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python -m pytest tests/ -v --tb=short"
