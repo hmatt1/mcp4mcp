@@ -1,0 +1,265 @@
+# mcp4mcp Project Structure & Build Plan
+
+## Project Overview
+
+**mcp4mcp** - A Meta MCP Server that provides persistent memory and intelligent guidance for MCP development projects.
+
+## Directory Structure
+
+```
+mcp4mcp/
+├── pyproject.toml              # Project dependencies and metadata
+├── README.md                   # Project documentation
+├── server.py                   # Main FastMCP server entry point
+├── mcp4mcp/
+│   ├── __init__.py
+│   ├── models.py               # Pydantic data models
+│   ├── storage.py              # Simple JSON storage functions
+│   ├── tools/
+│   │   ├── __init__.py
+│   │   ├── state_management.py # get_project_state, update_project_state, scan_project_files
+│   │   ├── intelligence.py     # check_before_build, suggest_next_action
+│   │   └── tracking.py         # update_tool_status, track_development_session
+│   ├── analyzers/
+│   │   ├── __init__.py
+│   │   ├── code_scanner.py     # AST parsing for tool discovery
+│   │   └── similarity.py       # LLM-powered similarity detection
+│   └── utils/
+│       ├── __init__.py
+│       └── helpers.py          # Utility functions
+├── tests/
+│   ├── __init__.py
+│   ├── test_server.py          # Server integration tests
+│   ├── test_models.py          # Data model tests
+│   ├── test_storage.py         # Storage backend tests
+│   └── test_tools.py           # Tool functionality tests
+└── examples/
+    ├── example_project/        # Sample MCP project for testing
+    │   ├── server.py
+    │   └── tools.py
+    └── demo_usage.py           # Usage examples
+```
+
+## File Breakdown & Responsibilities
+
+### 1. `pyproject.toml`
+
+**Purpose**: Project configuration and dependencies
+
+```toml
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[project]
+name = "mcp4mcp"
+version = "0.1.0"
+description = "Meta MCP Server for MCP development intelligence"
+authors = [{name = "Your Name", email = "your.email@example.com"}]
+dependencies = [
+    "fastmcp>=2.0.0",
+    "pydantic>=2.0.0",
+    "aiosqlite>=0.19.0",
+]
+```
+
+### 2. `server.py`
+
+**Purpose**: Main FastMCP server entry point - imports and registers all tools
+
+```python
+from fastmcp import FastMCP
+from mcp4mcp.tools.state_management import register_state_tools
+from mcp4mcp.tools.intelligence import register_intelligence_tools
+from mcp4mcp.tools.tracking import register_tracking_tools
+
+mcp = FastMCP("mcp4mcp - Meta MCP Development Server")
+
+# Register all tool modules
+register_state_tools(mcp)
+register_intelligence_tools(mcp)
+register_tracking_tools(mcp)
+
+if __name__ == "__main__":
+    mcp.run()
+```
+
+### 3. `mcp4mcp/models.py`
+
+**Purpose**: All Pydantic data models for type safety and validation
+
+- `ProjectState` - Main project state container
+- `Tool` - Individual tool representation
+- `DevelopmentSession` - Session tracking data
+- `SimilarityResult` - Tool similarity analysis results
+- `ProjectAnalysis` - Project maturity analysis
+
+### 4. `mcp4mcp/storage.py`
+
+**Purpose**: SQLite storage optimized for MCP project intelligence
+
+- `init_database()` - Create tables for projects, tools, sessions
+- `load_project_state()` - Load project with efficient joins
+- `save_project_state()` - Atomic updates with transactions
+- `find_similar_tools_db()` - Fast similarity queries across all projects
+
+### 5. `mcp4mcp/tools/state_management.py`
+
+**Purpose**: Core state management tools
+
+- `get_project_state()` - Load and return current project state
+- `update_project_state()` - Update project with new information
+- `scan_project_files()` - Sync stored state with actual files
+
+### 6. `mcp4mcp/tools/intelligence.py`
+
+**Purpose**: AI-powered development intelligence
+
+- `check_before_build()` - Duplication detection
+- `suggest_next_action()` - LLM-powered development suggestions
+
+### 7. `mcp4mcp/tools/tracking.py`
+
+**Purpose**: Progress and session tracking
+
+- `update_tool_status()` - Track individual tool progress
+- `track_development_session()` - Log development sessions
+
+### 8. `mcp4mcp/analyzers/code_scanner.py`
+
+**Purpose**: AST-based code analysis
+
+- `scan_mcp_project()` - Find all MCP tools in project files
+- `extract_tool_info()` - Get tool metadata from AST
+- `detect_mcp_patterns()` - Identify MCP usage patterns
+
+### 9. `mcp4mcp/analyzers/similarity.py`
+
+**Purpose**: LLM-powered similarity detection
+
+- `find_similar_tools()` - Semantic similarity using LLM
+- `calculate_similarity_score()` - Score tool similarity
+- `group_similar_tools()` - Cluster similar tools
+
+### 10. `mcp4mcp/analyzers/similarity.py`
+
+**Purpose**: LLM-powered similarity detection
+
+- `find_similar_tools()` - Semantic similarity using LLM
+- `parse_similarity_response()` - Parse LLM response
+
+### 11. `mcp4mcp/utils/helpers.py`
+
+**Purpose**: Shared utility functions
+
+- `analyze_project_completeness()` - Calculate completion metrics
+- `format_tools_for_analysis()` - Format tool data for LLM
+- `parse_suggestions()` - Parse LLM suggestions
+
+## Build Order & Dependencies
+
+### Phase 1: Foundation (Build First)
+
+1. **`models.py`** - Data structures first
+1. **`storage.py`** - Simple JSON storage functions
+1. **`utils/helpers.py`** - Basic utilities
+
+### Phase 2: Core Analysis (Build Second)
+
+1. **`analyzers/code_scanner.py`** - File scanning capabilities
+1. **`analyzers/similarity.py`** - LLM-powered similarity
+
+### Phase 3: Tools (Build Third)
+
+1. **`tools/state_management.py`** - Basic state operations
+1. **`tools/tracking.py`** - Progress tracking
+1. **`tools/intelligence.py`** - AI-powered features
+
+### Phase 4: Integration (Build Last)
+
+1. **`server.py`** - Main server assembly
+1. **Tests** - Comprehensive testing
+1. **Examples** - Usage demonstrations
+
+## Key Design Decisions
+
+### Storage Strategy
+
+- **SQLite**: Single database file `~/.mcp4mcp/projects.db`
+- **Optimized for queries**: Fast similarity searches and project analysis
+- **Atomic updates**: Prevent corruption during concurrent access
+- **Structured relationships**: Tools can reference each other efficiently
+
+### Tool Registration Pattern
+
+```python
+# Each tool module exports a registration function
+def register_state_tools(mcp: FastMCP):
+    @mcp.tool()
+    async def get_project_state(project_name: str = "default") -> ProjectState:
+        from mcp4mcp.storage import load_project_state
+        return await load_project_state(project_name)
+    
+    @mcp.tool()
+    async def update_project_state(...):
+        # Implementation
+```
+
+### Error Handling Strategy
+
+- **Graceful Degradation**: If file scanning fails, still return stored state
+- **Validation**: Pydantic models ensure data integrity
+- **User Feedback**: Clear error messages via Context logging
+
+### LLM Integration Points
+
+- **Similarity Detection**: Use `ctx.sample()` for semantic comparison
+- **Development Suggestions**: Use `ctx.sample()` for intelligent recommendations
+- **Limited Usage**: Only where human-like reasoning is essential
+
+## Testing Strategy
+
+### Unit Tests
+
+- **Models**: Pydantic validation and serialization
+- **Storage**: Both JSON and SQLite backends
+- **Analyzers**: Code scanning and similarity detection
+- **Tools**: Each tool function individually
+
+### Integration Tests
+
+- **Full Server**: End-to-end tool calls
+- **Real Projects**: Test on actual MCP projects
+
+### Example-Driven Testing
+
+- **Sample Project**: Include a realistic MCP project in `examples/`
+- **Demo Scripts**: Show typical usage patterns
+- **Documentation**: Every tool has working examples
+
+## Configuration Options
+
+### Storage Location
+
+```python
+# Default: ~/.mcp4mcp/
+# Simple and predictable
+STORAGE_DIR = Path.home() / ".mcp4mcp"
+```
+
+### LLM Sampling Parameters
+
+```python
+# Keep these simple and focused
+MAX_SIMILARITY_TOKENS = 200
+MAX_SUGGESTION_TOKENS = 500
+```
+
+This structure provides:
+
+- **Clear Separation**: Each file has a single, well-defined purpose
+- **Testable Components**: Every piece can be tested independently
+- **Extensible Design**: Easy to add new analyzers or storage backends
+- **Production Ready**: Proper error handling and configuration management
+
+Ready to start building? We should begin with the foundation files (models.py and storage.py) and work our way up!
