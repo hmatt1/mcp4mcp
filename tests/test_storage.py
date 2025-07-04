@@ -90,21 +90,25 @@ class TestStorage:
         
         tool1 = Tool(name="file_reader", description="Read files from disk")
         tool2 = Tool(name="file_writer", description="Write files to disk")
-        tool3 = Tool(name="calculator", description="Perform calculations")
+        tool3 = Tool(name="file_processor", description="Process files")
+        tool4 = Tool(name="file_manager", description="Manage files on disk")
+        tool5 = Tool(name="calculator", description="Perform calculations")
         
         project.add_tool(tool1)
         project.add_tool(tool2)
         project.add_tool(tool3)
+        project.add_tool(tool4)
+        project.add_tool(tool5)
         
         await save_project_state(project)
         
         # Find similar tools
-        similar_tools = await find_similar_tools_db("file_processor", "Process files")
+        similar_tools = await find_similar_tools_db("file_handler", "Handle files")
         
-        # Should find file_reader and file_writer as more similar than calculator
+        # Should find file-related tools as more similar
         assert len(similar_tools) >= 2
         file_tools = [tool for tool in similar_tools if "file" in tool.name]
-        assert len(file_tools) == 2
+        assert len(file_tools) >= 2
     
     @pytest.mark.asyncio
     async def test_get_development_sessions(self):

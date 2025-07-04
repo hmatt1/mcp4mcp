@@ -60,10 +60,10 @@ async def track_development_session(
         return {
             "success": True,
             "session_id": current_session.session_id,
+            "action": action,
             "message": f"Logged action: {action}",
-            "session_duration": str(datetime.now() - current_session.start_time),
-            "actions_count": len(current_session.actions_taken),
-            "tools_worked_on": len(current_session.tools_worked_on)
+            "project_name": project_name,
+            "action_count": len(current_session.actions_taken)
         }
 
     except Exception as e:

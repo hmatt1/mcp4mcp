@@ -47,11 +47,11 @@ class TestServerIntegration:
         """Test that server is created with tools"""
         assert self.mcp.name == "test-mcp4mcp"
         # Tools should be registered
-        assert len(self.mcp.tools) > 0
+        assert len(self.mcp._tools) > 0
     
     def test_tool_registration(self):
         """Test that all expected tools are registered"""
-        tool_names = [tool.name for tool in self.mcp.tools]
+        tool_names = [tool.name for tool in self.mcp._tools.values()]
         
         # State management tools
         assert "get_project_state_tool" in tool_names
@@ -72,7 +72,7 @@ class TestServerIntegration:
         """Test that tools can be executed"""
         # Find the get_project_state_tool
         get_project_tool = None
-        for tool in self.mcp.tools:
+        for tool in self.mcp._tools.values():
             if tool.name == "get_project_state_tool":
                 get_project_tool = tool
                 break
