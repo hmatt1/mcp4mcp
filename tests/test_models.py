@@ -83,11 +83,11 @@ class TestProjectState:
         tool = Tool(name="test_tool", description="Test tool")
         project.add_tool(tool)
         
-        success = project.update_tool_status("test_tool", ToolStatus.IMPLEMENTED)
+        success = project.update_tool_status("test_tool", ToolStatus.COMPLETED)
         assert success is True
-        assert project.tools["test_tool"].status == ToolStatus.IMPLEMENTED
+        assert project.tools["test_tool"].status == ToolStatus.COMPLETED
         
-        failure = project.update_tool_status("missing_tool", ToolStatus.IMPLEMENTED)
+        failure = project.update_tool_status("missing_tool", ToolStatus.COMPLETED)
         assert failure is False
 
 
@@ -97,6 +97,7 @@ class TestDevelopmentSession:
     def test_session_creation(self):
         """Test basic session creation"""
         session = DevelopmentSession(
+            session_id="test_session",
             project_name="test_project",
             actions=[SessionAction(
                 action="Started development",
@@ -118,13 +119,13 @@ class TestSimilarityResult:
             tool1_name="tool1",
             tool2_name="tool2",
             similarity_score=0.85,
-            analysis="High similarity detected",
-            recommendation="Consider merging these tools"
+            explanation="High similarity detected",
+            recommended_action="Consider merging these tools"
         )
         assert result.tool1_name == "tool1"
         assert result.tool2_name == "tool2"
         assert result.similarity_score == 0.85
-        assert result.analysis == "High similarity detected"
+        assert result.explanation == "High similarity detected"
 
 
 class TestProjectAnalysis:
@@ -136,9 +137,11 @@ class TestProjectAnalysis:
             total_tools=5,
             completed_tools=3,
             completion_percentage=60.0,
-            recommendations=["Add more error handling", "Improve documentation"]
+            suggested_next_actions=["Add more error handling", "Improve documentation"],
+            potential_duplicates=[],
+            missing_patterns=[]
         )
         assert analysis.total_tools == 5
         assert analysis.completed_tools == 3
         assert analysis.completion_percentage == 60.0
-        assert len(analysis.recommendations) == 2
+        assert len(analysis.suggested_next_actions) == 2

@@ -114,6 +114,7 @@ class TestStorage:
         # Create project with session
         project = ProjectState(name="test_project")
         session = DevelopmentSession(
+            session_id="test_session_123",
             project_name="test_project",
             actions=[]
         )

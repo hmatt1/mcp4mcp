@@ -1,13 +1,14 @@
 """
-Development session and activity tracking tools
+Development session tracking tools
 """
 
+import json
 import uuid
 from datetime import datetime
-from typing import Dict, Any, List
+from typing import Dict, Any, List, Optional
 from fastmcp import FastMCP
-from ..models import DevelopmentSession, ProjectState
-from ..storage import load_project_state, save_project_state, init_database
+from ..storage import init_database, load_project_state, save_project_state, get_development_sessions
+from ..models import DevelopmentSession, SessionAction
 
 
 async def track_development_session(
