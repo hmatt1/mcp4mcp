@@ -37,14 +37,10 @@ task = "shell.exec"
 args = "python -m pytest tests/ -v --tb=short > out.txt 1>&1"
 
 [[workflows.workflow]]
-name = "Pwd"
+name = "LLM"
 mode = "sequential"
 author = 44620470
 
 [[workflows.workflow.tasks]]
 task = "shell.exec"
-args = "pwd"
-
-[[workflows.workflow.tasks]]
-task = "shell.exec"
-args = "echo “hello” > out.txt"
+args = "python llm.py"
