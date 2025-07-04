@@ -230,6 +230,36 @@ async def find_similar_tools_db(tool_name: str, project_name: str = "default", t
         return similar_tools
 
 
+async def get_development_sessions(project_name: str = "default", limit: int = 10) -> List[DevelopmentSession]:
+    """Get development sessions for a project"""
+    await init_database()
+    
+    async with aiosqlite.connect(DB_PATH) as db:
+        cursor = await db.execute("""
+            SELECT * FROM sessions 
+            WHERE project_name = ? 
+            ORDER BY start_time DESC 
+            LIMIT ?
+        """, (project_name, limit))
+        
+        rows = await cursor.fetchall()
+        sessions = []
+        
+        for row in rows:
+            session = DevelopmentSession(
+                session_id=row[0],
+                project_name=row[1],
+                start_time=datetime.fromisoformat(row[2]),
+                end_time=datetime.fromisoformat(row[3]) if row[3] else None,
+                tools_worked_on=json.loads(row[4]) if row[4] else [],
+                actions_taken=json.loads(row[5]) if row[5] else [],
+                notes=row[6] or ""
+            )
+            sessions.append(session)
+        
+        return sessions
+
+
 async def list_all_projects() -> List[str]:
     """Get list of all project names"""
     await init_database()

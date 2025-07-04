@@ -32,6 +32,14 @@ class Tool(BaseModel):
     similarity_scores: Dict[str, float] = Field(default_factory=dict)
 
 
+class SessionAction(BaseModel):
+    """Individual action within a development session"""
+    action: str
+    tool_name: Optional[str] = None
+    timestamp: datetime = Field(default_factory=datetime.now)
+    details: Optional[str] = None
+
+
 class DevelopmentSession(BaseModel):
     """Session tracking data"""
     session_id: str
@@ -40,6 +48,7 @@ class DevelopmentSession(BaseModel):
     end_time: Optional[datetime] = None
     tools_worked_on: List[str] = Field(default_factory=list)
     actions_taken: List[str] = Field(default_factory=list)
+    actions: List[SessionAction] = Field(default_factory=list)
     notes: str = ""
 
 
