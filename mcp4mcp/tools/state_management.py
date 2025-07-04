@@ -1,4 +1,3 @@
-
 """
 Core state management tools for MCP projects
 """
@@ -16,7 +15,7 @@ async def get_project_state(project_name: str = "default") -> Dict[str, Any]:
     try:
         await init_database()
         project = await load_project_state(project_name)
-        
+
         return {
             "success": True,
             "project": {
@@ -54,11 +53,11 @@ async def update_project_state(
     try:
         await init_database()
         project = await load_project_state(project_name)
-        
+
         # Update description if provided
         if description:
             project.description = description
-        
+
         # Update tools if provided
         if tools:
             for tool_data in tools:
@@ -72,9 +71,9 @@ async def update_project_state(
                     return_type=tool_data.get("return_type")
                 )
                 project.add_tool(tool)
-        
+
         await save_project_state(project)
-        
+
         return {
             "success": True,
             "message": f"Updated project '{project_name}'",
@@ -95,15 +94,15 @@ async def scan_project_files(
     try:
         await init_database()
         project = await load_project_state(project_name)
-        
+
         # Scan for tools
         scanner = MCPToolScanner(project_root)
         discovered_tools = scanner.scan_project_files()
-        
+
         # Add discovered tools to project
         new_tools = 0
         updated_tools = 0
-        
+
         for tool in discovered_tools:
             if tool.name in project.tools:
                 # Update existing tool
@@ -119,12 +118,12 @@ async def scan_project_files(
                 # Add new tool
                 project.add_tool(tool)
                 new_tools += 1
-        
+
         await save_project_state(project)
-        
+
         # Get project summary
         summary = scanner.get_project_summary()
-        
+
         return {
             "success": True,
             "message": f"Scanned project files",
@@ -146,59 +145,69 @@ async def update_tool_status(
     project_name: str = "default"
 ) -> Dict[str, Any]:
     """Update the status of a specific tool"""
+    from mcp4mcp.models import ToolStatus
+
     try:
         await init_database()
         project = await load_project_state(project_name)
-        
+
+        # Find and update the tool
         if tool_name not in project.tools:
             return {
                 "success": False,
-                "error": f"Tool '{tool_name}' not found in project"
+                "message": f"Tool '{tool_name}' not found in project '{project_name}'"
             }
-        
-        try:
-            new_status = ToolStatus(status)
-        except ValueError:
+
+        # Convert status string to ToolStatus enum
+        status_map = {
+            "planned": ToolStatus.PLANNED,
+            "in_progress": ToolStatus.IN_PROGRESS,
+            "implemented": ToolStatus.IMPLEMENTED,
+            "completed": ToolStatus.IMPLEMENTED,
+            "testing": ToolStatus.TESTED,
+            "tested": ToolStatus.TESTED,
+            "deprecated": ToolStatus.PLANNED  # Map to closest available status
+        }
+
+        if status.lower() not in status_map:
             return {
                 "success": False,
-                "error": f"Invalid status '{status}'. Valid options: {[s.value for s in ToolStatus]}"
+                "message": f"Invalid status '{status}'. Valid options: {list(status_map.keys())}"
             }
-        
-        success = project.update_tool_status(tool_name, new_status)
-        
-        if success:
-            await save_project_state(project)
-            return {
-                "success": True,
-                "message": f"Updated tool '{tool_name}' status to '{status}'"
-            }
-        else:
-            return {
-                "success": False,
-                "error": "Failed to update tool status"
-            }
+
+        # Update the tool status
+        project.tools[tool_name].status = status_map[status.lower()]
+
+        # Save the updated project
+        await save_project_state(project)
+
+        return {
+            "success": True,
+            "message": f"Updated tool '{tool_name}' status to '{status}'"
+        }
+
     except Exception as e:
         return {
             "success": False,
-            "error": str(e)
+            "message": f"Error updating tool status: {str(e)}"
         }
 
 
 def register_state_tools(mcp: FastMCP):
     """Register state management tools with FastMCP"""
-    
+
     @mcp.tool()
     async def get_project_state_tool(project_name: str = "default") -> Dict[str, Any]:
         """Load current project state from storage
-        
+
         Args:
             project_name: Name of the project to load (default: "default")
-            
+
         Returns:
             Dict containing project state and tools
         """
         return await get_project_state(project_name)
-    
+
     @mcp.tool()
     async def update_project_state_tool(
         project_name: str = "default",
@@ -206,33 +215,33 @@ def register_state_tools(mcp: FastMCP):
         tools: List[Dict[str, Any]] = None
     ) -> Dict[str, Any]:
         """Update project information and tools
-        
+
         Args:
             project_name: Name of the project to update
             description: Project description
             tools: List of tool definitions to add/update
-            
+
         Returns:
             Dict with success status and message
         """
         return await update_project_state(project_name, description, tools or [])
-    
+
     @mcp.tool()
     async def scan_project_files_tool(
         project_name: str = "default",
         project_root: str = "."
     ) -> Dict[str, Any]:
         """Scan project files for MCP tools and update state
-        
+
         Args:
             project_name: Name of the project to update
             project_root: Root directory to scan (default: current directory)
-            
+
         Returns:
             Dict with scan results and discovered tools
         """
         return await scan_project_files(project_name, project_root)
-    
+
     @mcp.tool()
     async def update_tool_status_tool(
         tool_name: str,
@@ -240,12 +249,12 @@ def register_state_tools(mcp: FastMCP):
         project_name: str = "default"
     ) -> Dict[str, Any]:
         """Update the status of a specific tool
-        
+
         Args:
             tool_name: Name of the tool to update
             status: New status (planned, in_progress, completed, testing, deprecated)
             project_name: Name of the project containing the tool
-            
+
         Returns:
             Dict with success status and message
         """
