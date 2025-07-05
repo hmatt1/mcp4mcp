@@ -39,7 +39,7 @@ tests/test_server.py:53: in test_server_creation
     assert hasattr(self.mcp, 'tools')
 E   AssertionError: assert False
 E    +  where False = hasattr(FastMCP('test-mcp4mcp'), 'tools')
-E    +    where FastMCP('test-mcp4mcp') = <tests.test_server.TestServerIntegration object at 0x7f23f152f590>.mcp
+E    +    where FastMCP('test-mcp4mcp') = <tests.test_server.TestServerIntegration object at 0x7f27ecb438d0>.mcp
 _________________ TestServerIntegration.test_tool_registration _________________
 tests/test_server.py:58: in test_tool_registration
     tool_names = list(self.mcp.tools.keys())
@@ -59,4 +59,4 @@ FAILED tests/test_server.py::TestServerIntegration::test_server_creation - As...
 FAILED tests/test_server.py::TestServerIntegration::test_tool_registration - ...
 FAILED tests/test_server.py::TestServerIntegration::test_tool_execution - Att...
 FAILED tests/test_tools.py::TestIntelligence::test_analyze_tool_similarity - ...
-========================= 4 failed, 21 passed in 2.12s =========================
+========================= 4 failed, 21 passed in 1.76s =========================

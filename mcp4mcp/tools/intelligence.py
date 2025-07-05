@@ -165,6 +165,8 @@ async def analyze_tool_similarity(
                 "message": "Need at least 2 tools to analyze similarity",
                 "similarity_results": [],
                 "similar_pairs": [],
+                "total_comparisons": 0,  # Fix: Add missing key
+                "threshold": similarity_threshold,
                 "summary": "No tools available for similarity analysis"
             }
 
@@ -188,6 +190,7 @@ async def analyze_tool_similarity(
         return {
             "success": True,
             "similarity_results": formatted_results,
+            "similar_pairs": formatted_results,  # Add this for backward compatibility
             "potential_duplicates": len(duplicates),
             "total_comparisons": len(similarity_results),
             "threshold": similarity_threshold
