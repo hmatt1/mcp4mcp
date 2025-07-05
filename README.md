@@ -1,293 +1,241 @@
+# mcp4mcp
 
-# mcp4mcp - Meta MCP Server
+> **Meta MCP Server** - AI-powered development assistant for building better MCP projects
 
-A Meta MCP Server that provides persistent memory and intelligent guidance for MCP development projects.
+[![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
+[![FastMCP](https://img.shields.io/badge/FastMCP-compatible-green.svg)](https://github.com/jlowin/fastmcp)
+[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
 
-## 🎯 Overview
-
-**mcp4mcp** is a specialized MCP server designed to help developers build better MCP projects. It provides:
-
-- **Persistent Project Memory**: Track tools, their status, and development progress across sessions
-- **AI-Powered Intelligence**: Get suggestions, detect duplicates, and avoid conflicts
-- **Development Session Tracking**: Monitor your development activities and progress
-- **Code Analysis**: Automatic discovery and analysis of MCP tools in your codebase
-- **Similarity Detection**: Find similar tools to avoid duplication and improve consistency
+**mcp4mcp** automatically tracks your MCP tools, detects duplicates, suggests improvements, and provides AI-powered guidance throughout your development process.
 
 ## 🚀 Quick Start
 
-### Installation
-
 ```bash
-# Install dependencies
-pip install -e .
+# Install
+pip install fastmcp
+git clone https://github.com/your-org/mcp4mcp.git
+cd mcp4mcp && pip install -e .
 
-# Start the server
+# Start server
 python server.py
 
-# Or use the main entry point
-python main.py server
-```
-
-### Basic Usage
-
-```bash
-# Run the demo to see all features
+# Try the demo
 python main.py demo
-
-# Run tests
-python main.py test
 ```
 
-## 🛠️ Features
+## 💡 What You Get
 
-### Core Tools
+- 🧠 **AI suggestions** for next development steps
+- 🔍 **Duplicate detection** before you build conflicting tools
+- 📊 **Progress tracking** across development sessions
+- 🔄 **Auto-discovery** of tools in your codebase
+- 📈 **Analytics** on your development patterns
 
-The server provides 11 MCP tools organized into three categories:
+## 🛠️ Core Tools
 
-#### State Management
-- **`get_project_state_tool`** - Load current project state and tools
-- **`update_project_state_tool`** - Update project information and add/modify tools
-- **`scan_project_files_tool`** - Automatically scan files for MCP tools
-
-#### Intelligence & Analysis
-- **`check_before_build_tool`** - Check for conflicts before building new tools
-- **`suggest_next_action_tool`** - Get AI-powered development suggestions
-- **`analyze_tool_similarity_tool`** - Analyze tools for similarity and duplication
-
-#### Development Tracking
-- **`track_development_session_tool`** - Log development activities and progress
-- **`end_development_session_tool`** - End a development session with summary
-- **`get_development_sessions_tool`** - Get recent development sessions
-- **`get_session_analytics_tool`** - Get development analytics and insights
-- **`update_tool_status_tool`** - Update individual tool status
+|Tool                            |Purpose                               |
+|--------------------------------|--------------------------------------|
+|`get_project_state_tool`        |Load your current project and tools   |
+|`update_project_state_tool`     |Add/update tools and project info     |
+|`scan_project_files_tool`       |Auto-discover tools in your code      |
+|`check_before_build_tool`       |Check for conflicts before building   |
+|`suggest_next_action_tool`      |Get AI-powered development suggestions|
+|`analyze_tool_similarity_tool`  |Find similar/duplicate tools          |
+|`track_development_session_tool`|Log your development activities       |
+|`get_session_analytics_tool`    |View development insights             |
 
 ## 📋 Usage Examples
 
-### 1. Project Management
+### Start Development Session
 
 ```python
-# Start a new development session
+# Log what you're working on
 await track_development_session(
-    "Started working on file tools",
+    "Building file processing tools", 
     "my_project",
-    "file_reader",
-    "Implementing CSV file reading capability"
-)
-
-# Update project with new tools
-await update_project_state(
-    "my_project",
-    "File processing MCP server",
-    [
-        {
-            "name": "read_csv",
-            "description": "Read CSV files",
-            "status": "planned"
-        },
-        {
-            "name": "write_csv", 
-            "description": "Write CSV files",
-            "status": "planned"
-        }
-    ]
+    "csv_reader"
 )
 ```
 
-### 2. Conflict Detection
+### Check Before Building
 
 ```python
-# Check before building a new tool
+# Avoid duplicates
 result = await check_before_build(
-    "csv_processor",
-    "Process CSV files by reading and writing",
-    "my_project"
+    "file_processor", 
+    "Process CSV files",
+    "my_project" 
 )
 
-# Result will show potential conflicts with existing tools
-print(f"Conflicts found: {len(result['conflicts'])}")
-print(f"Recommendations: {result['recommendations']}")
+if result['conflicts']:
+    print("⚠️ Similar tools exist - consider reusing instead")
 ```
 
-### 3. AI-Powered Suggestions
+### Get AI Suggestions
 
 ```python
-# Get intelligent suggestions
+# Get personalized guidance
 suggestions = await suggest_next_action(
     "my_project",
-    "I've implemented file reading, what should I do next?"
+    "Just finished the CSV reader, what's next?"
 )
 
-print("AI Suggestions:")
 for suggestion in suggestions['suggestions']:
-    print(f"- {suggestion}")
+    print(f"💡 {suggestion}")
 ```
 
-### 4. Code Scanning
+### Auto-Discover Tools
 
 ```python
-# Automatically discover tools in your codebase
-scan_result = await scan_project_files("my_project", "./src")
-
-print(f"Found {scan_result['tools_found']} tools:")
-for tool in scan_result['tools']:
-    print(f"- {tool['name']}: {tool['description']}")
+# Scan your codebase
+result = await scan_project_files("my_project", "./src")
+print(f"🔍 Found {result['new_tools']} new tools")
 ```
 
-## 🏗️ Architecture
+## 🤖 AI-Powered MCP Development
 
-### Project Structure
+Use this prompt template with any LLM to build MCP servers that leverage mcp4mcp:
 
-```
-mcp4mcp/
-├── server.py              # FastMCP server entry point
-├── mcp4mcp/
-│   ├── models.py           # Pydantic data models
-│   ├── storage.py          # SQLite storage backend
-│   ├── tools/              # MCP tool implementations
-│   │   ├── state_management.py
-│   │   ├── intelligence.py
-│   │   └── tracking.py
-│   ├── analyzers/          # Code analysis modules
-│   │   ├── code_scanner.py
-│   │   └── similarity.py
-│   └── utils/              # Utility functions
-├── tests/                  # Comprehensive test suite
-└── examples/               # Usage examples and demos
-```
+```markdown
+# MCP Server Development with mcp4mcp
 
-### Data Models
+You are an expert MCP (Model Context Protocol) developer building a new MCP server. 
+You have access to mcp4mcp tools that provide intelligent development assistance.
 
-#### ProjectState
-```python
-class ProjectState(BaseModel):
-    name: str
-    description: str
-    tools: Dict[str, Tool]
-    sessions: List[DevelopmentSession]
-    analysis: Optional[ProjectAnalysis]
-    created_at: datetime
-    updated_at: datetime
-```
+## Your Development Process:
 
-#### Tool
-```python
-class Tool(BaseModel):
-    name: str
-    description: str
-    status: ToolStatus  # PLANNED, IN_PROGRESS, IMPLEMENTED, TESTED
-    file_path: Optional[str]
-    function_name: Optional[str]
-    parameters: List[Dict[str, Any]]
-    return_type: Optional[str]
-    similarity_scores: Dict[str, float]
+1. **Start Each Session**: Always begin by calling `track_development_session_tool` 
+   to log what you're working on
+
+2. **Before Building Any Tool**: Call `check_before_build_tool` to check for 
+   conflicts and similar existing tools
+
+3. **Get AI Guidance**: Use `suggest_next_action_tool` for personalized 
+   development recommendations based on project state
+
+4. **Update Progress**: Use `update_project_state_tool` to track tools as you 
+   build them (planned → in_progress → completed)
+
+5. **Discover Existing Tools**: Use `scan_project_files_tool` to automatically 
+   find tools in the codebase
+
+6. **Check for Duplicates**: Run `analyze_tool_similarity_tool` periodically 
+   to find similar tools that could be consolidated
+
+## Current Task:
+Build a [DOMAIN] MCP server with tools for [SPECIFIC_FUNCTIONALITY].
+
+## Project Details:
+- Project name: [PROJECT_NAME]
+- Description: [PROJECT_DESCRIPTION] 
+- Key requirements: [LIST_REQUIREMENTS]
+
+Start by calling the appropriate mcp4mcp tools to understand the current state 
+and get AI-powered suggestions for the best approach.
 ```
 
-## 💾 Storage
+### Example Prompt Usage:
 
-All project data is stored in SQLite at `~/.mcp4mcp/projects.db` with the following tables:
+```markdown
+# MCP Server Development with mcp4mcp
 
-- **projects** - Project metadata and state
-- **tools** - Individual tool definitions and status
-- **sessions** - Development session tracking
-- **session_actions** - Detailed session activities
+You are an expert MCP developer building a new MCP server. You have access to mcp4mcp tools.
 
-## 🧪 Testing
+## Current Task:
+Build a file processing MCP server with tools for reading, writing, and transforming CSV/JSON files.
 
-Comprehensive test suite covering:
+## Project Details:
+- Project name: file-processor-mcp
+- Description: MCP server for file operations with data transformation capabilities
+- Key requirements: 
+  * Read CSV and JSON files
+  * Write data in multiple formats  
+  * Transform data between formats
+  * Validate file schemas
+  * Handle large files efficiently
 
-```bash
-# Run all tests
-python -m pytest tests/ -v
-
-# Run specific test categories
-python -m pytest tests/test_models.py -v      # Data models
-python -m pytest tests/test_storage.py -v     # Storage backend
-python -m pytest tests/test_tools.py -v       # Tool functionality
-python -m pytest tests/test_server.py -v      # Server integration
+Start by calling mcp4mcp tools to check current state and get development guidance.
 ```
 
-## 📚 Examples
+## 🔧 Integration
 
-### Example Project
-
-The `examples/example_project/` directory contains a sample MCP server with:
-
-- File manipulation tools (read, write, list)
-- Mathematical calculation tools (calculator, sqrt, power, factorial)
-- Proper FastMCP integration
-
-### Demo Script
-
-Run the comprehensive demo:
-
-```bash
-python examples/demo_usage.py
-```
-
-This demonstrates:
-- Project creation and management
-- Tool scanning and analysis
-- Development session tracking
-- AI-powered suggestions
-- Conflict detection
-
-## 🔧 Configuration
-
-### Environment Variables
-
-- `MCP4MCP_DB_PATH` - Custom database path (default: `~/.mcp4mcp/projects.db`)
-- `MCP4MCP_LOG_LEVEL` - Logging level (default: `INFO`)
-
-### FastMCP Integration
+Add mcp4mcp to any FastMCP project:
 
 ```python
 from fastmcp import FastMCP
 from mcp4mcp.tools.state_management import register_state_tools
-from mcp4mcp.tools.intelligence import register_intelligence_tools
+from mcp4mcp.tools.intelligence import register_intelligence_tools  
 from mcp4mcp.tools.tracking import register_tracking_tools
 
-mcp = FastMCP("your-mcp-server")
+# Your MCP server
+mcp = FastMCP("your-server")
 
-# Register mcp4mcp tools
+# Add mcp4mcp intelligence
 register_state_tools(mcp)
-register_intelligence_tools(mcp)
+register_intelligence_tools(mcp) 
 register_tracking_tools(mcp)
 
-# Register your own tools
+# Your tools
 @mcp.tool()
 def your_tool():
-    return "Hello from your tool!"
+    return "Hello World"
 
 mcp.run()
 ```
 
-## 🚀 Development
+## 📊 Development Analytics
 
-### Adding New Tools
+View your development patterns:
 
-1. Create tool functions in appropriate module (`mcp4mcp/tools/`)
-2. Add tests in `tests/test_tools.py`
-3. Register tools in `server.py`
-4. Update documentation
+```python
+# Get insights on your development
+analytics = await get_session_analytics("my_project", days=7)
 
-### Contributing
+print(f"📈 This week:")
+print(f"  Sessions: {analytics['total_sessions']}")  
+print(f"  Time: {analytics['total_development_time']}")
+print(f"  Tools: {len(analytics['tools_worked_on'])}")
+```
 
-1. Fork the repository
-2. Create a feature branch
-3. Add tests for new functionality
-4. Ensure all tests pass
-5. Submit a pull request
+## 🗃️ Data Storage
+
+All data stored locally in `~/.mcp4mcp/projects.db` - no external dependencies.
+
+## 🧪 Testing
+
+```bash
+# Run demo
+python main.py demo
+
+# Run tests  
+python main.py test
+
+# FastMCP diagnostics
+python run_diagnostic.py
+```
+
+## 🛠️ Development
+
+```bash
+# Setup
+git clone https://github.com/your-org/mcp4mcp.git
+cd mcp4mcp
+pip install -e ".[dev]"
+
+# Test
+python -m pytest tests/ -v
+```
 
 ## 📄 License
 
-This project is licensed under the MIT License.
+MIT License - see <LICENSE> file.
 
 ## 🤝 Support
 
-- **Issues**: Report bugs and request features on GitHub
-- **Documentation**: Full API documentation in the code
-- **Examples**: See `examples/` directory for usage patterns
+- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/mcp4mcp/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/mcp4mcp/discussions)
+- 📚 **Examples**: See `examples/` directory
 
----
+-----
 
-**mcp4mcp** - Making MCP development smarter, one tool at a time! 🚀
+**mcp4mcp** - Intelligence for MCP development 🧠✨
