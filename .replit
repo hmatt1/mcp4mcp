@@ -44,3 +44,12 @@ author = 44620470
 [[workflows.workflow.tasks]]
 task = "shell.exec"
 args = "python llm.py"
+
+[[workflows.workflow]]
+name = "diag"
+mode = "sequential"
+author = 44620470
+
+[[workflows.workflow.tasks]]
+task = "shell.exec"
+args = "python run_diagnostic.py > out.txt 2>&1"

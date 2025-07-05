@@ -5,58 +5,34 @@ rootdir: /home/runner/workspace
 configfile: pyproject.toml
 plugins: anyio-4.9.0, asyncio-1.0.0
 asyncio: mode=Mode.STRICT, asyncio_default_fixture_loop_scope=None, asyncio_default_test_loop_scope=function
-collecting ... collected 25 items
+collecting ... collected 27 items
 
-tests/test_models.py::TestTool::test_tool_creation PASSED                [  4%]
-tests/test_models.py::TestTool::test_tool_with_parameters PASSED         [  8%]
-tests/test_models.py::TestProjectState::test_project_creation PASSED     [ 12%]
-tests/test_models.py::TestProjectState::test_add_tool PASSED             [ 16%]
-tests/test_models.py::TestProjectState::test_get_tool PASSED             [ 20%]
-tests/test_models.py::TestProjectState::test_update_tool_status PASSED   [ 24%]
-tests/test_models.py::TestDevelopmentSession::test_session_creation PASSED [ 28%]
-tests/test_models.py::TestSimilarityResult::test_similarity_result_creation PASSED [ 32%]
-tests/test_models.py::TestProjectAnalysis::test_project_analysis_creation PASSED [ 36%]
-tests/test_server.py::TestServerIntegration::test_server_creation FAILED [ 40%]
-tests/test_server.py::TestServerIntegration::test_tool_registration FAILED [ 44%]
-tests/test_server.py::TestServerIntegration::test_tool_execution FAILED  [ 48%]
-tests/test_storage.py::TestStorage::test_init_database PASSED            [ 52%]
-tests/test_storage.py::TestStorage::test_save_and_load_project_state PASSED [ 56%]
-tests/test_storage.py::TestStorage::test_load_nonexistent_project PASSED [ 60%]
-tests/test_storage.py::TestStorage::test_find_similar_tools_db PASSED    [ 64%]
-tests/test_storage.py::TestStorage::test_get_development_sessions PASSED [ 68%]
-tests/test_tools.py::TestStateManagement::test_get_project_state PASSED  [ 72%]
-tests/test_tools.py::TestStateManagement::test_update_project_state PASSED [ 76%]
-tests/test_tools.py::TestStateManagement::test_scan_project_files PASSED [ 80%]
-tests/test_tools.py::TestIntelligence::test_check_before_build PASSED    [ 84%]
+tests/test_models.py::TestTool::test_tool_creation PASSED                [  3%]
+tests/test_models.py::TestTool::test_tool_with_parameters PASSED         [  7%]
+tests/test_models.py::TestProjectState::test_project_creation PASSED     [ 11%]
+tests/test_models.py::TestProjectState::test_add_tool PASSED             [ 14%]
+tests/test_models.py::TestProjectState::test_get_tool PASSED             [ 18%]
+tests/test_models.py::TestProjectState::test_update_tool_status PASSED   [ 22%]
+tests/test_models.py::TestDevelopmentSession::test_session_creation PASSED [ 25%]
+tests/test_models.py::TestSimilarityResult::test_similarity_result_creation PASSED [ 29%]
+tests/test_models.py::TestProjectAnalysis::test_project_analysis_creation PASSED [ 33%]
+tests/test_server.py::TestServerIntegration::test_server_creation PASSED [ 37%]
+tests/test_server.py::TestServerIntegration::test_tool_registration PASSED [ 40%]
+tests/test_server.py::TestServerIntegration::test_tool_execution PASSED  [ 44%]
+tests/test_server.py::TestServerIntegration::test_error_handling PASSED  [ 48%]
+tests/test_server.py::TestServerIntegration::test_intelligence_tools PASSED [ 51%]
+tests/test_storage.py::TestStorage::test_init_database PASSED            [ 55%]
+tests/test_storage.py::TestStorage::test_save_and_load_project_state PASSED [ 59%]
+tests/test_storage.py::TestStorage::test_load_nonexistent_project PASSED [ 62%]
+tests/test_storage.py::TestStorage::test_find_similar_tools_db PASSED    [ 66%]
+tests/test_storage.py::TestStorage::test_get_development_sessions PASSED [ 70%]
+tests/test_tools.py::TestStateManagement::test_get_project_state PASSED  [ 74%]
+tests/test_tools.py::TestStateManagement::test_update_project_state PASSED [ 77%]
+tests/test_tools.py::TestStateManagement::test_scan_project_files PASSED [ 81%]
+tests/test_tools.py::TestIntelligence::test_check_before_build PASSED    [ 85%]
 tests/test_tools.py::TestIntelligence::test_suggest_next_action PASSED   [ 88%]
-tests/test_tools.py::TestIntelligence::test_analyze_tool_similarity FAILED [ 92%]
+tests/test_tools.py::TestIntelligence::test_analyze_tool_similarity PASSED [ 92%]
 tests/test_tools.py::TestTracking::test_track_development_session PASSED [ 96%]
 tests/test_tools.py::TestTracking::test_end_development_session PASSED   [100%]
 
-=================================== FAILURES ===================================
-__________________ TestServerIntegration.test_server_creation __________________
-tests/test_server.py:53: in test_server_creation
-    assert hasattr(self.mcp, 'tools')
-E   AssertionError: assert False
-E    +  where False = hasattr(FastMCP('test-mcp4mcp'), 'tools')
-E    +    where FastMCP('test-mcp4mcp') = <tests.test_server.TestServerIntegration object at 0x7f27ecb438d0>.mcp
-_________________ TestServerIntegration.test_tool_registration _________________
-tests/test_server.py:58: in test_tool_registration
-    tool_names = list(self.mcp.tools.keys())
-                      ^^^^^^^^^^^^^^
-E   AttributeError: 'FastMCP' object has no attribute 'tools'
-__________________ TestServerIntegration.test_tool_execution ___________________
-tests/test_server.py:78: in test_tool_execution
-    assert "get_project_state_tool" in self.mcp.tools
-                                       ^^^^^^^^^^^^^^
-E   AttributeError: 'FastMCP' object has no attribute 'tools'
-________________ TestIntelligence.test_analyze_tool_similarity _________________
-tests/test_tools.py:155: in test_analyze_tool_similarity
-    assert "total_comparisons" in result
-E   AssertionError: assert 'total_comparisons' in {'message': 'Need at least 2 tools to analyze similarity', 'similar_pairs': [], 'similarity_results': [], 'success': True, ...}
-=========================== short test summary info ============================
-FAILED tests/test_server.py::TestServerIntegration::test_server_creation - As...
-FAILED tests/test_server.py::TestServerIntegration::test_tool_registration - ...
-FAILED tests/test_server.py::TestServerIntegration::test_tool_execution - Att...
-FAILED tests/test_tools.py::TestIntelligence::test_analyze_tool_similarity - ...
-========================= 4 failed, 21 passed in 1.76s =========================
+============================== 27 passed in 2.30s ==============================

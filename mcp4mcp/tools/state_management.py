@@ -111,7 +111,7 @@ async def scan_project_files(
                 existing.function_name = tool.function_name
                 existing.parameters = tool.parameters
                 existing.return_type = tool.return_type
-                if existing.status == ToolStatus.PLANNED and tool.status == ToolStatus.COMPLETED:
+                if existing.status == ToolStatus.PLANNED and tool.status in [ToolStatus.COMPLETED, ToolStatus.IMPLEMENTED]:
                     existing.status = tool.status
                 updated_tools += 1
             else:
@@ -145,8 +145,6 @@ async def update_tool_status(
     project_name: str = "default"
 ) -> Dict[str, Any]:
     """Update the status of a specific tool"""
-    from mcp4mcp.models import ToolStatus
-
     try:
         await init_database()
         project = await load_project_state(project_name)
@@ -158,15 +156,15 @@ async def update_tool_status(
                 "message": f"Tool '{tool_name}' not found in project '{project_name}'"
             }
 
-        # Convert status string to ToolStatus enum
+        # Convert status string to ToolStatus enum - Fixed mapping
         status_map = {
             "planned": ToolStatus.PLANNED,
             "in_progress": ToolStatus.IN_PROGRESS,
             "implemented": ToolStatus.IMPLEMENTED,
-            "completed": ToolStatus.IMPLEMENTED,
-            "testing": ToolStatus.TESTED,
+            "completed": ToolStatus.COMPLETED,
+            "testing": ToolStatus.TESTING,
             "tested": ToolStatus.TESTED,
-            "deprecated": ToolStatus.PLANNED  # Map to closest available status
+            "deprecated": ToolStatus.DEPRECATED
         }
 
         if status.lower() not in status_map:
@@ -252,7 +250,7 @@ def register_state_tools(mcp: FastMCP):
 
         Args:
             tool_name: Name of the tool to update
-            status: New status (planned, in_progress, completed, testing, deprecated)
+            status: New status (planned, in_progress, implemented, completed, testing, tested, deprecated)
             project_name: Name of the project containing the tool
 
         Returns:

@@ -1,4 +1,3 @@
-
 """
 Pydantic data models for type safety and validation
 """
@@ -13,8 +12,10 @@ class ToolStatus(str, Enum):
     """Status of a tool in development"""
     PLANNED = "planned"
     IN_PROGRESS = "in_progress"
+    IMPLEMENTED = "implemented"  # Added missing status
     COMPLETED = "completed"
     TESTING = "testing"
+    TESTED = "tested"  # Added missing status
     DEPRECATED = "deprecated"
 
 

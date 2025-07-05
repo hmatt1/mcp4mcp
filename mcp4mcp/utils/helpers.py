@@ -1,4 +1,3 @@
-
 """
 Shared utility functions
 """
@@ -10,8 +9,10 @@ from ..models import ProjectState, Tool, ProjectAnalysis, ToolStatus, Similarity
 def analyze_project_completeness(project: ProjectState) -> ProjectAnalysis:
     """Calculate completion metrics"""
     total_tools = len(project.tools)
+    
+    # Count completed tools (both COMPLETED and IMPLEMENTED count as completed)
     completed_tools = sum(1 for tool in project.tools.values() 
-                         if tool.status == ToolStatus.COMPLETED)
+                         if tool.status in [ToolStatus.COMPLETED, ToolStatus.IMPLEMENTED])
     
     completion_percentage = (completed_tools / total_tools * 100) if total_tools > 0 else 0
     

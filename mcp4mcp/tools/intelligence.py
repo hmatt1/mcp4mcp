@@ -125,6 +125,7 @@ async def suggest_next_action(
         # Limit suggestions
         suggestions = suggestions[:5]
         next_priority = _determine_next_priority(analysis, similarity_results)
+        
         return {
             "success": True,
             "suggestions": suggestions,
@@ -165,7 +166,7 @@ async def analyze_tool_similarity(
                 "message": "Need at least 2 tools to analyze similarity",
                 "similarity_results": [],
                 "similar_pairs": [],
-                "total_comparisons": 0,  # Fix: Add missing key
+                "total_comparisons": 0,
                 "threshold": similarity_threshold,
                 "summary": "No tools available for similarity analysis"
             }

@@ -7,7 +7,7 @@ import uuid
 from datetime import datetime
 from typing import Dict, Any, List, Optional
 from fastmcp import FastMCP
-from ..storage import init_database, load_project_state, save_project_state, get_development_sessions
+from ..storage import init_database, load_project_state, save_project_state
 from ..models import DevelopmentSession, SessionAction
 
 
@@ -118,7 +118,7 @@ async def end_development_session(
         }
 
 
-async def get_development_sessions(
+async def get_development_sessions_list(
     project_name: str = "default",
     limit: int = 10
 ) -> Dict[str, Any]:
@@ -311,7 +311,7 @@ def register_tracking_tools(mcp: FastMCP):
         Returns:
             Dict with list of recent sessions
         """
-        return await get_development_sessions(project_name, limit)
+        return await get_development_sessions_list(project_name, limit)
 
     @mcp.tool()
     async def get_session_analytics_tool(

@@ -1,4 +1,3 @@
-
 """
 AST parsing for tool discovery in MCP codebases
 """
@@ -123,6 +122,12 @@ class MCPToolScanner:
                 return True
             elif isinstance(decorator, ast.Attribute) and decorator.attr == "tool":
                 return True
+            elif isinstance(decorator, ast.Call):
+                # Handle @mcp.tool() style decorators
+                if isinstance(decorator.func, ast.Attribute) and decorator.func.attr == "tool":
+                    return True
+                elif isinstance(decorator.func, ast.Name) and decorator.func.id == "tool":
+                    return True
         return False
     
     def _is_tool_like_function(self, func_node: ast.FunctionDef) -> bool:
@@ -162,7 +167,7 @@ class MCPToolScanner:
             # Extract parameters
             parameters = []
             for arg in func_node.args.args:
-                if arg.arg != "self":  # Skip self parameter
+                if arg.arg not in ["self", "ctx"]:  # Skip self and ctx parameters
                     param_info = {
                         "name": arg.arg,
                         "type": self._get_annotation_string(arg.annotation),
@@ -174,7 +179,7 @@ class MCPToolScanner:
             return_type = self._get_annotation_string(func_node.returns)
             
             # Determine status based on implementation
-            status = ToolStatus.COMPLETED if len(func_node.body) > 1 else ToolStatus.PLANNED
+            status = ToolStatus.IMPLEMENTED if len(func_node.body) > 1 else ToolStatus.PLANNED
             
             return Tool(
                 name=func_node.name,
@@ -211,7 +216,7 @@ class MCPToolScanner:
             return Tool(
                 name=class_node.name,
                 description=description or f"Tool class: {class_node.name}",
-                status=ToolStatus.COMPLETED,
+                status=ToolStatus.IMPLEMENTED,
                 file_path=str(file_path.relative_to(self.project_root)),
                 function_name=main_method,
                 parameters=[],
