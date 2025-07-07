@@ -1,0 +1,49 @@
+name: Test PyPI Upload
+
+on:
+  workflow_dispatch:  # Manual trigger only
+    inputs:
+      version:
+        description: 'Version to test (e.g., 0.1.0-test1)'
+        required: true
+        type: string
+
+jobs:
+  test-publish:
+    runs-on: ubuntu-latest
+    
+    steps:
+    - uses: actions/checkout@v4
+    
+    - name: Set up Python
+      uses: actions/setup-python@v4
+      with:
+        python-version: '3.11'
+    
+    - name: Update version for testing
+      run: |
+        sed -i 's/version = ".*"/version = "${{ github.event.inputs.version }}"/' pyproject.toml
+    
+    - name: Install build dependencies
+      run: |
+        python -m pip install --upgrade pip
+        pip install build twine
+    
+    - name: Build package
+      run: python -m build
+    
+    - name: Check package
+      run: twine check dist/*
+    
+    - name: Upload to Test PyPI
+      env:
+        TWINE_USERNAME: __token__
+        TWINE_PASSWORD: ${{ secrets.PYPI_API_TOKEN }}
+      run: |
+        twine upload --repository testpypi dist/*
+    
+    - name: Test installation from Test PyPI
+      run: |
+        sleep 30  # Wait for Test PyPI to process
+        pip install --index-url https://test.pypi.org/simple/ --extra-index-url https://pypi.org/simple/ mcp4mcp==${{ github.event.inputs.version }}
+        python -c "import mcp4mcp; print('Test PyPI installation successful')"

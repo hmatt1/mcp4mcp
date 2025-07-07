@@ -4,7 +4,7 @@
 
 [![Python 3.8+](https://img.shields.io/badge/python-3.8+-blue.svg)](https://www.python.org/downloads/)
 [![FastMCP](https://img.shields.io/badge/FastMCP-compatible-green.svg)](https://github.com/jlowin/fastmcp)
-[![License: MIT](https://img.shields.io/badge/License-MIT-yellow.svg)](https://opensource.org/licenses/MIT)
+[![License: Unlicense](https://img.shields.io/badge/License-Unlicense-blue.svg)](https://unlicense.org/)
 
 **mcp4mcp** automatically tracks your MCP tools, detects duplicates, suggests improvements, and provides AI-powered guidance throughout your development process.
 
@@ -228,7 +228,7 @@ python -m pytest tests/ -v
 
 ## 📄 License
 
-MIT License - see <LICENSE> file.
+This is free and unencumbered software released into the public domain. See the [UNLICENSE](UNLICENSE) file for details.
 
 ## 🤝 Support
 

@@ -1,0 +1,9 @@
+include README.md
+include LICENSE
+include UNLICENSE
+include pyproject.toml
+include uv.lock
+recursive-include mcp4mcp *.py
+recursive-include examples *.py
+recursive-include tests *.py
+recursive-include prompts *.md
