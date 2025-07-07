@@ -13,10 +13,33 @@
 ### Installation
 
 ```bash
-# Install mcp4mcp from PyPI (recommended)
+# Install mcp4mcp from PyPI
 pip install mcp4mcp
+```
 
-# Start the MCP server
+### Setup with Claude Desktop
+
+Add this to your Claude Desktop `claude_desktop_config.json` file:
+
+```json
+{
+  "mcpServers": {
+    "mcp4mcp": {
+      "command": "mcp4mcp-server",
+      "args": []
+    }
+  }
+}
+```
+
+Claude Desktop will automatically start and manage the mcp4mcp server. Then just chat:
+
+*"Help me build an MCP server for file processing. Use mcp4mcp to track progress and avoid duplicates."*
+
+### Manual Usage (Optional)
+
+```bash
+# Or run manually for testing
 mcp4mcp-server
 
 # Or run the demo
