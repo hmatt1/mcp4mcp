@@ -8,7 +8,6 @@ version = "0.1.0"
 description = "Meta MCP Server for MCP development intelligence"
 authors = [{name = "Matt Hornung", email = "hornung.m1@gmail.com"}]
 readme = "README.md"
-license = {text = "Unlicense"}
 requires-python = ">=3.11"
 classifiers = [
     "Development Status :: 3 - Alpha",
