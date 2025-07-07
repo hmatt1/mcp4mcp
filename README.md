@@ -10,17 +10,48 @@
 
 ## 🚀 Quick Start
 
+### Installation
+
 ```bash
-# Install
-pip install fastmcp
-git clone https://github.com/your-org/mcp4mcp.git
+# Install mcp4mcp from PyPI (recommended)
+pip install mcp4mcp
+
+# Start the MCP server
+mcp4mcp-server
+
+# Or run the demo
+mcp4mcp demo
+```
+
+### Using with Claude Code
+
+**mcp4mcp** integrates seamlessly with **Claude Code** for AI-powered MCP development:
+
+```bash
+# 1. Start mcp4mcp server (in one terminal)
+mcp4mcp-server
+
+# 2. Connect Claude Code with mcp4mcp tools available
+claude-code --mcp-server mcp4mcp
+
+# 3. Ask Claude Code to help with MCP development
+"Help me build an MCP server for database operations. Use mcp4mcp to track progress."
+```
+
+**What Claude Code can do with mcp4mcp:**
+- 🎯 **Track development sessions** automatically
+- 🔍 **Check for duplicate tools** before building
+- 💡 **Provide AI suggestions** based on your project state  
+- 📊 **Monitor progress** across development sessions
+- 🔄 **Discover existing tools** in your codebase
+
+### Development Installation
+
+```bash
+# Install from source for development
+git clone https://github.com/hmatt1/mcp4mcp.git
 cd mcp4mcp && pip install -e .
-
-# Start server
 python server.py
-
-# Try the demo
-python main.py demo
 ```
 
 ## 💡 What You Get
@@ -43,6 +74,63 @@ python main.py demo
 |`analyze_tool_similarity_tool`  |Find similar/duplicate tools          |
 |`track_development_session_tool`|Log your development activities       |
 |`get_session_analytics_tool`    |View development insights             |
+
+## 🤖 Using with Claude Code
+
+**mcp4mcp** is designed to work perfectly with **Claude Code** for intelligent MCP development:
+
+### Quick Setup
+
+```bash
+# Terminal 1: Start mcp4mcp server
+mcp4mcp-server
+
+# Terminal 2: Start Claude Code with mcp4mcp tools
+claude-code --mcp-server mcp4mcp
+```
+
+### Example Claude Code Sessions
+
+#### Building a New MCP Server
+```
+You: "Help me build an MCP server for file processing with CSV and JSON support."
+
+Claude Code automatically:
+1. 🎯 Calls track_development_session_tool("file-processing-mcp", "Building CSV/JSON tools")
+2. 🔍 Uses check_before_build_tool to see if similar tools exist
+3. 💡 Calls suggest_next_action_tool for personalized guidance
+4. 📊 Tracks progress as you build each tool
+```
+
+#### Avoiding Duplicate Work
+```
+You: "I want to add a data validation tool to my project."
+
+Claude Code automatically:
+1. 🔍 Scans existing tools with scan_project_files_tool
+2. ⚠️  Alerts if similar validation tools already exist
+3. 💡 Suggests reusing or extending existing tools instead
+4. 🎯 Tracks the decision in your development session
+```
+
+#### Getting Development Insights
+```
+You: "What should I work on next for my MCP project?"
+
+Claude Code automatically:
+1. 📊 Calls get_session_analytics_tool for project insights
+2. 💡 Uses suggest_next_action_tool based on current state
+3. 🎯 Provides personalized recommendations
+4. 📈 Shows development patterns and progress
+```
+
+### Benefits of Claude Code + mcp4mcp
+
+- **🧠 Intelligent Context**: Claude Code understands MCP development patterns
+- **🔍 Automatic Conflict Detection**: Prevents duplicate tool development
+- **📊 Continuous Tracking**: Every development action is logged automatically
+- **💡 Contextual Suggestions**: AI guidance based on your specific project state
+- **🚀 Accelerated Development**: Focus on building, not project management
 
 ## 📋 Usage Examples
 
@@ -218,7 +306,7 @@ python run_diagnostic.py
 
 ```bash
 # Setup
-git clone https://github.com/your-org/mcp4mcp.git
+git clone https://github.com/hmatt1/mcp4mcp.git
 cd mcp4mcp
 pip install -e ".[dev]"
 
@@ -232,8 +320,8 @@ This is free and unencumbered software released into the public domain. See the 
 
 ## 🤝 Support
 
-- 🐛 **Issues**: [GitHub Issues](https://github.com/your-org/mcp4mcp/issues)
-- 💬 **Discussions**: [GitHub Discussions](https://github.com/your-org/mcp4mcp/discussions)
+- 🐛 **Issues**: [GitHub Issues](https://github.com/hmatt1/mcp4mcp/issues)
+- 💬 **Discussions**: [GitHub Discussions](https://github.com/hmatt1/mcp4mcp/discussions)
 - 📚 **Examples**: See `examples/` directory
 
 -----
