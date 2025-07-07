@@ -257,7 +257,6 @@ for suggestion in suggestions['suggestions']:
 result = await scan_project_files("my_project", "./src")
 print(f"🔍 Found {result['new_tools']} new tools")
 ```
-
 ## 🤖 AI-Powered MCP Development
 
 Use this prompt template with any LLM to build MCP servers that leverage mcp4mcp:
@@ -323,6 +322,106 @@ Build a file processing MCP server with tools for reading, writing, and transfor
 Start by calling mcp4mcp tools to check current state and get development guidance.
 ```
 
+### Example Prompt: File System MCP Server
+
+```markdown
+# MCP Server Development with mcp4mcp
+
+You are an expert MCP (Model Context Protocol) developer building a new MCP server.
+You have access to mcp4mcp tools that provide intelligent development assistance.
+
+## Current Task:
+Build a file system MCP server with comprehensive file and directory management capabilities.
+
+## Project Details:
+- Project name: filesystem-mcp
+- Description: A robust MCP server providing file system operations with safety limits and encoding support
+- Key requirements:
+  * List files and directories with recursive options and safety limits
+  * Read file contents with multiple encoding support (utf-8, binary, etc.)
+  * Support reading files in chunks and with size limits
+  * Generate hex dumps of binary files
+  * Search files by extension, regex patterns, and other criteria
+  * Create new files safely with proper error handling
+  * Make line replacements in text files with backup options
+  * Proper error handling and validation for all operations
+  * Support for common character encodings
+  * Built-in safety limits to prevent abuse
+  
+## Implementation Guidelines:
+1. Start with core file listing and reading capabilities
+2. Add extension filtering and search functionality
+3. Implement file creation and modification features
+4. Add safety checks and validation throughout
+5. Support multiple encoding formats
+6. Implement chunked reading for large files
+7. Add hex dump capability for binary files
+
+## Architecture Considerations:
+- Use a modular design to separate different file operations
+- Implement proper validation and safety checks
+- Consider adding configuration options for limits and defaults
+- Include comprehensive error handling
+- Add logging for file operations
+
+## How to Use mcp4mcp Tools for This Project
+
+To ensure a robust, efficient, and non-duplicative development process, rely on mcp4mcp tools at every stage:
+
+1. **Track Your Development Sessions**  
+   Use `track_development_session_tool` to log each new session, including your current focus (e.g., "Implementing file listing"). This creates a clear project history and helps with analytics.
+
+2. **Check for Existing Tools Before Building**  
+   Before implementing any new feature (such as file reading or extension search), always call `check_before_build_tool` to detect similar or duplicate tools in your project. This prevents wasted effort and encourages code reuse.
+
+3. **Get AI Guidance for Each Step**  
+   Use `suggest_next_action_tool` to get personalized, context-aware recommendations for your next development steps. This leverages mcp4mcp's AI to optimize your workflow and avoid common pitfalls.
+
+4. **Scan the Project for Existing Code**  
+   Regularly run `scan_project_files_tool` to auto-discover tools and code patterns in your codebase. This helps you find reusable components and ensures your project state is always up to date.
+
+5. **Update Project State as You Build**  
+   As you add or modify tools, use `update_project_state_tool` to keep your project metadata current. Mark tools as planned, in progress, or completed for accurate tracking.
+
+6. **Analyze for Similarity and Duplicates**  
+   Periodically run `analyze_tool_similarity_tool` to identify overlapping or redundant tools, so you can consolidate functionality and keep your codebase clean.
+
+7. **Review Analytics and Progress**  
+   Use `get_session_analytics_tool` to review your development patterns, session history, and tool usage. This helps you reflect on your workflow and plan improvements.
+
+By integrating these mcp4mcp tools into your workflow, you ensure that your file system MCP server is built efficiently, avoids duplication, and benefits from continuous AI-powered guidance and tracking.
+```
+
+## Basic Usage Example of File System MCP Server:
+
+```python
+# Example tool invocations once built
+files = await list_files_tool(
+    path="./src",
+    recursive=True,
+    max_depth=3,
+    exclude_patterns=["*.pyc", "__pycache__"]
+)
+
+content = await read_file_tool(
+    path="./config.json",
+    encoding="utf-8",
+    max_size_mb=10
+)
+
+search_results = await find_files_tool(
+    pattern="*.py",
+    search_dir="./src",
+    recursive=True
+)
+
+await replace_in_file_tool(
+    path="./settings.ini",
+    old_string="debug=false",
+    new_string="debug=true",
+    backup=True
+)
+```
 ## 🔧 Integration
 
 Add mcp4mcp to any FastMCP project:
