@@ -1,4 +1,3 @@
-
 """
 mcp4mcp - Meta MCP Server entry point
 """
@@ -8,15 +7,16 @@ from mcp4mcp.tools.state_management import register_state_tools
 from mcp4mcp.tools.intelligence import register_intelligence_tools
 from mcp4mcp.tools.tracking import register_tracking_tools
 
-# Create FastMCP server
-mcp = FastMCP("mcp4mcp - Meta MCP Development Server")
+def main():
+    """Main entry point for mcp4mcp-server command"""
+    # Create FastMCP server
+    mcp = FastMCP("mcp4mcp - Meta MCP Development Server")
 
-# Register all tool modules
-register_state_tools(mcp)
-register_intelligence_tools(mcp)
-register_tracking_tools(mcp)
+    # Register all tool modules
+    register_state_tools(mcp)
+    register_intelligence_tools(mcp)
+    register_tracking_tools(mcp)
 
-if __name__ == "__main__":
     print("Starting mcp4mcp server...")
     print("Available tools:")
     print("- get_project_state_tool: Load current project state")
@@ -32,3 +32,6 @@ if __name__ == "__main__":
     print("- get_session_analytics_tool: Get development analytics")
     print("\nStarting FastMCP server...")
     mcp.run()
+
+if __name__ == "__main__":
+    main()

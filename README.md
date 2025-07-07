@@ -63,6 +63,37 @@ mcp4mcp-server
 mcp4mcp demo
 ```
 
+### Development Setup
+
+For local development and testing:
+
+```bash
+# Clone and install from source
+git clone https://github.com/hmatt1/mcp4mcp.git
+cd mcp4mcp
+pip install -e .
+```
+
+**Test with Claude Desktop (Development):**
+
+```json
+{
+  "mcpServers": {
+    "mcp4mcp-dev": {
+      "command": "python",
+      "args": ["C:\\path\\to\\your\\mcp4mcp\\server.py"]
+    }
+  }
+}
+```
+
+Replace `C:\\path\\to\\your\\mcp4mcp\\` with your actual project path.
+
+**Troubleshooting:**
+- Ensure dependencies: `pip install fastmcp pydantic aiosqlite`
+- Test import: `python -c "import mcp4mcp; print('OK')"`
+- Test server: `python server.py`
+
 ### Using with Claude Desktop
 
 **mcp4mcp** integrates seamlessly with **Claude Desktop** for AI-powered MCP development:
