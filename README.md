@@ -8,6 +8,23 @@
 
 **mcp4mcp** automatically tracks your MCP tools, detects duplicates, suggests improvements, and provides AI-powered guidance throughout your development process.
 
+## ⚡ Zero-Install Setup (Recommended)
+
+Like `npx` for Node.js, use `uvx` for instant Python package execution:
+
+```json
+{
+  "mcpServers": {
+    "mcp4mcp": {
+      "command": "uvx",
+      "args": ["--from", "mcp4mcp", "mcp4mcp-server"]
+    }
+  }
+}
+```
+
+**No installation needed!** Claude Desktop automatically downloads and runs mcp4mcp when needed.
+
 ## 🚀 Quick Start
 
 ### Installation
