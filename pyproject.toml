@@ -1,6 +1,6 @@
 [build-system]
-requires = ["hatchling"]
-build-backend = "hatchling.build"
+requires = ["setuptools>=45", "wheel"]
+build-backend = "setuptools.build_meta"
 
 [project]
 name = "mcp4mcp"
@@ -42,16 +42,8 @@ dev = [
 mcp4mcp = "main:main"
 mcp4mcp-server = "server:main"
 
-[tool.hatch.version]
-path = "mcp4mcp/__init__.py"
+[tool.setuptools.packages.find]
+include = ["mcp4mcp*"]
 
-[tool.hatch.build.targets.sdist]
-include = [
-    "/mcp4mcp",
-    "/README.md",
-    "/LICENSE",
-    "/UNLICENSE",
-]
-
-[tool.hatch.build.targets.wheel]
-packages = ["mcp4mcp"]
+[tool.setuptools.package-data]
+mcp4mcp = ["py.typed"]

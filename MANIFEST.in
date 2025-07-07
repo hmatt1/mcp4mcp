@@ -1,6 +1,4 @@
 include README.md
-include LICENSE
-include UNLICENSE
 include pyproject.toml
 include uv.lock
 recursive-include mcp4mcp *.py
