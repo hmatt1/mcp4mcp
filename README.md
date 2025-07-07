@@ -23,22 +23,24 @@ mcp4mcp-server
 mcp4mcp demo
 ```
 
-### Using with Claude Code
+### Using with Claude Desktop
 
-**mcp4mcp** integrates seamlessly with **Claude Code** for AI-powered MCP development:
+**mcp4mcp** integrates seamlessly with **Claude Desktop** for AI-powered MCP development:
 
 ```bash
 # 1. Start mcp4mcp server (in one terminal)
 mcp4mcp-server
 
-# 2. Connect Claude Code with mcp4mcp tools available
-claude-code --mcp-server mcp4mcp
+# 2. Configure Claude Desktop MCP settings
+# Add to your Claude Desktop configuration:
+# Server Name: mcp4mcp
+# Command: mcp4mcp-server
 
-# 3. Ask Claude Code to help with MCP development
+# 3. Chat with Claude Desktop about MCP development
 "Help me build an MCP server for database operations. Use mcp4mcp to track progress."
 ```
 
-**What Claude Code can do with mcp4mcp:**
+**What Claude Desktop can do with mcp4mcp:**
 - 🎯 **Track development sessions** automatically
 - 🔍 **Check for duplicate tools** before building
 - 💡 **Provide AI suggestions** based on your project state  
@@ -75,9 +77,9 @@ python server.py
 |`track_development_session_tool`|Log your development activities       |
 |`get_session_analytics_tool`    |View development insights             |
 
-## 🤖 Using with Claude Code
+## 🤖 Using with Claude Desktop
 
-**mcp4mcp** is designed to work perfectly with **Claude Code** for intelligent MCP development:
+**mcp4mcp** is designed to work perfectly with **Claude Desktop** for intelligent MCP development:
 
 ### Quick Setup
 
@@ -85,17 +87,22 @@ python server.py
 # Terminal 1: Start mcp4mcp server
 mcp4mcp-server
 
-# Terminal 2: Start Claude Code with mcp4mcp tools
-claude-code --mcp-server mcp4mcp
+# Terminal 2: Configure Claude Desktop MCP settings
+# In Claude Desktop:
+# - Go to Settings → MCP Servers
+# - Add new server:
+#   Name: mcp4mcp
+#   Command: mcp4mcp-server
+#   Args: (leave empty)
 ```
 
-### Example Claude Code Sessions
+### Example Claude Desktop Sessions
 
 #### Building a New MCP Server
 ```
 You: "Help me build an MCP server for file processing with CSV and JSON support."
 
-Claude Code automatically:
+Claude Desktop automatically:
 1. 🎯 Calls track_development_session_tool("file-processing-mcp", "Building CSV/JSON tools")
 2. 🔍 Uses check_before_build_tool to see if similar tools exist
 3. 💡 Calls suggest_next_action_tool for personalized guidance
@@ -106,7 +113,7 @@ Claude Code automatically:
 ```
 You: "I want to add a data validation tool to my project."
 
-Claude Code automatically:
+Claude Desktop automatically:
 1. 🔍 Scans existing tools with scan_project_files_tool
 2. ⚠️  Alerts if similar validation tools already exist
 3. 💡 Suggests reusing or extending existing tools instead
@@ -117,16 +124,16 @@ Claude Code automatically:
 ```
 You: "What should I work on next for my MCP project?"
 
-Claude Code automatically:
+Claude Desktop automatically:
 1. 📊 Calls get_session_analytics_tool for project insights
 2. 💡 Uses suggest_next_action_tool based on current state
 3. 🎯 Provides personalized recommendations
 4. 📈 Shows development patterns and progress
 ```
 
-### Benefits of Claude Code + mcp4mcp
+### Benefits of Claude Desktop + mcp4mcp
 
-- **🧠 Intelligent Context**: Claude Code understands MCP development patterns
+- **🧠 Intelligent Context**: Claude Desktop understands MCP development patterns
 - **🔍 Automatic Conflict Detection**: Prevents duplicate tool development
 - **📊 Continuous Tracking**: Every development action is logged automatically
 - **💡 Contextual Suggestions**: AI guidance based on your specific project state
